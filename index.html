@@ -256,6 +256,25 @@ $("resetBtn").addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" }); toast("ئامادەیە بۆ بەنزینخانەی داهاتوو");
 });
 
+// Keep dates current when the page stays open past midnight (e.g. pinned to the home screen).
+let shownDay = fmt(new Date());
+function refreshDay() {
+  const now = fmt(new Date());
+  if (now === shownDay) return;
+  shownDay = now;
+  document.querySelectorAll(".day").forEach(b => {
+    const s = b.querySelector("small");
+    if (s) s.textContent = fmt(daysAgo(Number(b.dataset.k)));
+  });
+  const sel = document.querySelector('.day[aria-pressed="true"]');
+  if (sel && sel.dataset.k !== "?") { state.delivery = null; markDays(null); }
+  render();
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshDay(); });
+window.addEventListener("focus", refreshDay);
+window.addEventListener("pageshow", refreshDay);
+setInterval(refreshDay, 30000);
+
 buildLines(); buildStations(); buildChecks(); buildDays(); render();
 </script>
 
