@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231468ad'/%3E%3Cpath d='M32 12C24 24 19 31 19 38a13 13 0 0 0 26 0c0-7-5-14-13-26z' fill='%23fff'/%3E%3C/svg%3E">
+<title>ڕاپۆرتی بەنزینخانە</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@600;700&family=Noto+Sans+Arabic:wght@400;600&display=swap">
+<style>
+/* Layout: one narrow column like the paper field slip; zone tints copied from the printed Sulaimani form; a sticky action bar at the bottom for one-thumb use. */
+:root {
+  --bg: #eef2f6; --surface: #ffffff; --fg: #142231; --muted: #586878; --line: #d3dbe4;
+  --accent: #1468ad; --accent-fg: #ffffff;
+  --ok: #1d7a44; --ok-bg: #e2f2e8; --bad: #b3261e; --bad-bg: #fbe5e2;
+  --z1: #dbe9f6; --z2: #f0e2d1; --z3: #dbeae1; --zx: #e6ebf0;
+  --font-display: "Noto Kufi Arabic", "Noto Sans Arabic", Tahoma, sans-serif;
+  --font-body: "Noto Sans Arabic", Tahoma, "Segoe UI", sans-serif;
+  --font-data: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d141b; --surface: #15202a; --fg: #e5ecf2; --muted: #95a6b6; --line: #2a3a48;
+  --accent: #5aa8e4; --accent-fg: #0a1520;
+  --ok: #5fc98c; --ok-bg: #12301f; --bad: #f08a80; --bad-bg: #3a1613;
+  --z1: #17314a; --z2: #3a2c1d; --z3: #1b3a2b; --zx: #22303c; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0d141b; --surface: #15202a; --fg: #e5ecf2; --muted: #95a6b6; --line: #2a3a48;
+  --accent: #5aa8e4; --accent-fg: #0a1520;
+  --ok: #5fc98c; --ok-bg: #12301f; --bad: #f08a80; --bad-bg: #3a1613;
+  --z1: #17314a; --z2: #3a2c1d; --z3: #1b3a2b; --zx: #22303c; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 560px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 140px; display: grid; gap: 18px; }
+header { display: grid; gap: 4px; }
+h1 { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.3; margin: 0; text-wrap: balance; }
+.today { color: var(--muted); font-size: .95rem; }
+.today b { color: var(--fg); font-family: var(--font-data); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
+section { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 12px; min-width: 0; }
+h2 { font-family: var(--font-display); font-size: 1.05rem; margin: 0; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+h2 .step { color: var(--muted); font-family: var(--font-body); font-size: .85rem; font-weight: 600; }
+label.lbl { font-size: .9rem; color: var(--muted); }
+select, input[type="text"], input[type="date"], textarea {
+  width: 100%; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; min-height: 46px; }
+textarea { min-height: 70px; resize: vertical; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.zone { display: grid; gap: 8px; }
+.zone-name { font-size: .85rem; font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.swatch { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line); background: var(--zx); }
+.swatch.z1 { background: var(--z1); } .swatch.z2 { background: var(--z2); } .swatch.z3 { background: var(--z3); }
+.chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.chip { font: inherit; text-align: right; cursor: pointer; color: var(--fg); background: var(--zx); border: 2px solid transparent; border-radius: 10px; padding: 8px 10px; min-height: 48px; display: grid; align-content: center; gap: 0; }
+.chip.z1 { background: var(--z1); } .chip.z2 { background: var(--z2); } .chip.z3 { background: var(--z3); }
+.chip .hint { font-size: .75rem; color: var(--muted); line-height: 1.3; }
+.chip[aria-pressed="true"] { border-color: var(--accent); font-weight: 700; box-shadow: 0 0 0 2px var(--accent) inset; }
+.checks { display: grid; gap: 10px; }
+.row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px; }
+.row .name { font-weight: 600; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.seg button { font: inherit; font-size: 1.05rem; cursor: pointer; border: 0; background: var(--surface); color: var(--muted); min-width: 64px; min-height: 46px; padding: 0 10px; }
+.seg button + button { border-inline-start: 1px solid var(--line); }
+.seg button[aria-pressed="true"].yes { background: var(--ok-bg); color: var(--ok); font-weight: 700; }
+.seg button[aria-pressed="true"].no { background: var(--bad-bg); color: var(--bad); font-weight: 700; }
+.reason { grid-column: 1 / -1; }
+.days { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.day { font: inherit; cursor: pointer; border: 2px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 10px; min-height: 52px; padding: 4px; display: grid; align-content: center; justify-items: center; line-height: 1.25; }
+.day small { font-family: var(--font-data); font-size: .72rem; color: var(--muted); direction: ltr; }
+.day[aria-pressed="true"] { border-color: var(--accent); background: var(--surface); font-weight: 700; }
+.other { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; }
+pre#out { margin: 0; white-space: pre-wrap; word-break: break-word; font-family: var(--font-body); font-size: 1rem; line-height: 1.8; background: var(--bg); border: 1px dashed var(--line); border-radius: 10px; padding: 12px; direction: rtl; unicode-bidi: plaintext; }
+.missing { color: var(--bad); font-size: .9rem; min-height: 1.4em; }
+.bar { position: fixed; inset: auto 0 0 0; background: var(--surface); border-top: 1px solid var(--line); padding-top: 10px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); z-index: 5; }
+.bar-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1.4fr 1fr; gap: 8px; }
+.btn { font: inherit; font-weight: 700; cursor: pointer; border-radius: 12px; min-height: 52px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); display: inline-flex; align-items: center; justify-content: center; text-decoration: none; padding: 0 8px; text-align: center; line-height: 1.2; }
+.btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.btn[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(84px + env(safe-area-inset-bottom, 0px)); background: var(--fg); color: var(--bg); padding: 8px 16px; border-radius: 999px; font-weight: 600; z-index: 6; }
+.note { color: var(--muted); font-size: .85rem; margin: 0; }
+@media (prefers-reduced-motion: no-preference) { .chip, .day, .seg button { transition: background-color .12s, border-color .12s; } }
+</style>
+</head>
+<body>
+
+<div class="wrap" dir="rtl" lang="ckb">
+  <header>
+    <h1>ڕاپۆرتی بەنزینخانە</h1>
+    <div class="today">بەرواری ئەمڕۆ: <b id="todayTxt"></b> · دوای پڕکردنەوە کۆپی بکە و لە ژێر وێنەکان Paste بکە.</div>
+  </header>
+
+  <section aria-labelledby="h-st">
+    <h2 id="h-st">بەنزینخانە <span class="step">١</span></h2>
+    <div>
+      <label class="lbl" for="line">خەت</label>
+      <select id="line"></select>
+    </div>
+    <div id="stations" class="zone-list" style="display:grid;gap:14px"></div>
+  </section>
+
+  <section aria-labelledby="h-ck">
+    <h2 id="h-ck">پشکنین <span class="step">٢</span></h2>
+    <div class="checks" id="checks"></div>
+  </section>
+
+  <section aria-labelledby="h-dl">
+    <h2 id="h-dl">کاتی بەنزین هاتن <span class="step">٣</span></h2>
+    <div class="days" id="days"></div>
+    <div class="other">
+      <label class="lbl" for="otherDate">بەروارێکی تر</label>
+      <input type="date" id="otherDate">
+    </div>
+  </section>
+
+  <section aria-labelledby="h-nt">
+    <h2 id="h-nt">تێبینی <span class="step">٤</span></h2>
+    <textarea id="note" placeholder="ئەگەر هیچ نییە، بەتاڵی بهێڵە (دەبێتە 0️⃣)"></textarea>
+  </section>
+
+  <section aria-labelledby="h-pv">
+    <h2 id="h-pv">ئەوەی دەنێردرێت</h2>
+    <pre id="out"></pre>
+    <div class="missing" id="missing" role="status"></div>
+    <p class="note">«کۆپی» بۆ ژێر وێنەکانە. «WhatsApp» دەقەکە وەک نامەیەکی جیا دەنێرێت، و تۆ گرووپەکە هەڵدەبژێریت.</p>
+  </section>
+</div>
+
+<div class="bar" dir="rtl">
+  <div class="bar-in">
+    <button class="btn primary" id="copyBtn" type="button">کۆپی بکە</button>
+    <a class="btn" id="waBtn" href="https://wa.me/" target="_blank" rel="noopener">WhatsApp</a>
+    <button class="btn" id="resetBtn" type="button">نوێ</button>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const DATA = [{"line":"ناوشاری سلێمانی","groups":[{"label":"زۆنی 1","zone":"z1","st":[["سەردەم",""],["بناری گۆیژە",""],["ئایە",""],["HM 1","شاری ئارام"],["توی مەلیک",""],["هەوار",""],["هەڵگورد",""],["قەیوانی 3",""],["دەریا",""],["تاڤگەی سەرچنار",""]]},{"label":"زۆنی 2","zone":"z2","st":[["دەروازە",""],["برایەتی 1",""],["چۆمان",""],["HM 2","دووڕیانی سەرچنار؟"],["DH","سەروو بەنزینخانەی HM 2"],["بینایی",""],["ئاشتی",""],["پیترا",""],["کارۆس",""]]},{"label":"زۆنی 3","zone":"z3","st":[["پیشەسازی",""],["قەیوانی 1",""],["چەمی ڕێزان",""],["چوارچرا",""],["هاوای","دوای مزگەوتی سەڕافە"],["هەڵەبجە","فاملی مۆڵ"],["قەیوانی 2",""],["خاوێن",""],["کاژاو",""],["ژاڵە",""],["ئاکار",""],["بامۆک 1",""]]}]},{"line":"شارەزوور – پێنجوێن","groups":[{"label":"شارەزوور – پێنجوێن","zone":"","st":[["دەمرکان","عەربەت"],["گەشتیار","قەرەگۆڵ"],["باز","زەڕایەن"],["سەرهەنگ","زەڕایەن"],["شنروێ","سەید سادق"],["سەید سادق",""],["خورماڵ",""],["لهۆن","خورماڵ"],["سیروان",""],["عەدنان","هەڵەبجە"],["شکار","هەڵەبجە"],["کانی پانکە",""],["ناڵپارێز",""],["ئاسیا","پێنجوێن"],["پێنجوێن","پێنجوێن، تەنیشت پارکەکە"],["ئاڵا","پێنجوێن، دەرچەی پێنجوێن"],["ئاسان","عەربەت – لە گەڕانەوەدا دەکرێت"]]}]},{"line":"تاسڵوجە – چەمچەماڵ","groups":[{"label":"تاسڵوجە – چەمچەماڵ","zone":"","st":[["دەروازەی سلێمانی","تاسڵوجە، پشت سەیتەرەکە"],["تەیناڵ",""],["ڕێدین","تەکیە، پاش پردەکە"],["زمناکۆ","چەمچەماڵ"],["پاریس","چەمچەماڵ، ئاوەرەکان"],["بانی مەقان",""],["کاروان","چەمچەماڵ"],["ڕێناس","چەمچەماڵ"],["لوتکەی چۆمان","چەمچەماڵ"],["خۆشی","چەمچەماڵ"],["چەمچەماڵ",""],["هەڵۆ","چەمچەماڵ"],["هەرکۆ","تەکیە"],["سەرکۆ","کانی شەیتان"],["ئالان","بازیان، گوپاڵە"],["دڵشاد","بازیان"]]}]},{"line":"کەلار – گەرمیان","groups":[{"label":"کەلار – گەرمیان","zone":"","st":[["کارا","دەربەندیخان"],["چیا ئۆیل","دەربەندیخان"],["دیاری (گەرمیان)","باوەنوور؟"],["کەلار ئۆیل","کەلار، ئەوبەر"],["کەیوان","کەلار، ئەوبەر"],["ڕاما","کەلار"],["باوان","کەلار"],["وەفا","کفری"],["ئەیوب","کەلار"],["برایان","کەلار"],["شار (گەرمیان)","کەلار"],["شێروانە","کەلار"],["مرواری","کەلار"],["خانەقین","کەلار، ساڵح ئاغا؟"]]}]},{"line":"قەڵادزێ","groups":[{"label":"قەڵادزێ","zone":"","st":[["قەندیل","سەنگەسەر"],["کانی","سەنگەسەر"],["دەرگەڵە","ژاراوە"],["ئاکام","ژاراوە"],["ژاراوە",""],["شاهۆز","قەڵادزێ"],["شازاد","قەڵادزێ"],["قەڵادزێ",""],["پشدەر","قەڵادزێ، نزیک شازاد"]]}]},{"line":"ڕانیە","groups":[{"label":"ڕانیە","zone":"","st":[["محەمەد","خەلەکان"],["خەلەکان",""],["حەیدەر","حاجی ئاوا، قەرنی ئاغا"],["کاروخ","چوار قوڕنە"],["ئەستێرە","چوار قوڕنە"],["سەلام","چوار قوڕنە"],["حاجی ئاوا",""],["ماکۆک","سەرچاوە"],["شار (ڕانیە)","حاجی ئاوا"],["قەیوانی 4","چوار قوڕنە"],["ڕانیە",""],["فام ئۆیل","ڕانیە"],["سەرکەپکان","ڕانیە"],["کۆڤان","ڕانیە"],["پاشا پاوەر","ڕانیە"]]}]},{"line":"تاسڵوجە – دوکان","groups":[{"label":"تاسڵوجە – دوکان","zone":"","st":[["شاد","تاسڵوجە"],["کۆکار","کەلاوانان"],["ڕامان","زێوێ"],["کۆتەڵ",""],["دوکان",""],["دیاری (دوکان)","دوکان"],["بامۆک 5","کۆتەڵ"],["پیرە مەگروون",""]]}]},{"line":"شارباژێڕ – مێرگەپان","groups":[{"label":"شارباژێڕ – مێرگەپان","zone":"","st":[["سیتەکی نوێ","سیتەک"],["سانکۆ","سیتەک"],["تەگەران",""],["شارباژێڕ",""],["مێرگەپان",""],["زاموا","خێوەتە"],["هێمن","خێوەتە"]]}]}];
+const pad = n => String(n).padStart(2, "0");
+const fmt = d => d.getFullYear() + "/" + pad(d.getMonth() + 1) + "/" + pad(d.getDate());
+const daysAgo = k => { const d = new Date(); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() - k); return d; };
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+const state = { line: null, station: null, checks: { total: true, dip: true, sample: true },
+                reasons: { total: "", dip: "", sample: "" }, delivery: null, note: "" };
+const CHECKS = [["total", "تۆتاڵ"], ["dip", "زەرعی تانکی"], ["sample", "نموونە"]];
+const DAYS = [[0, "ئەمڕۆ"], [1, "دوێنێ"], [2, "پێرێ"], [3, "3 ڕۆژ لەمەوبەر"], [4, "4 ڕۆژ لەمەوبەر"], ["?", "نەزانراو"]];
+const $ = id => document.getElementById(id);
+
+function buildLines() {
+  const sel = $("line");
+  DATA.forEach((l, i) => { const o = document.createElement("option"); o.value = String(i); o.textContent = l.line; sel.appendChild(o); });
+  const saved = store.get("fox-line");
+  const idx = DATA.findIndex(l => l.line === saved);
+  sel.value = String(idx >= 0 ? idx : 0);
+  state.line = DATA[Number(sel.value)].line;
+  sel.addEventListener("change", () => { state.line = DATA[Number(sel.value)].line; state.station = null; store.set("fox-line", state.line); buildStations(); render(); });
+}
+function buildStations() {
+  const box = $("stations"); box.innerHTML = "";
+  const L = DATA.find(l => l.line === state.line);
+  L.groups.forEach(g => {
+    const z = document.createElement("div"); z.className = "zone";
+    if (L.groups.length > 1) {
+      const t = document.createElement("div"); t.className = "zone-name";
+      t.innerHTML = '<span class="swatch ' + g.zone + '"></span>'; t.append(g.label); z.appendChild(t);
+    }
+    const grid = document.createElement("div"); grid.className = "chips";
+    g.st.forEach(([name, hint]) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "chip " + (g.zone || "");
+      b.setAttribute("aria-pressed", String(state.station === name));
+      b.append(name);
+      if (hint) { const s = document.createElement("span"); s.className = "hint"; s.textContent = hint; b.appendChild(s); }
+      b.addEventListener("click", () => { state.station = name; box.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c === b))); render(); });
+      grid.appendChild(b);
+    });
+    z.appendChild(grid); box.appendChild(z);
+  });
+}
+function buildChecks() {
+  const box = $("checks");
+  CHECKS.forEach(([key, label]) => {
+    const row = document.createElement("div"); row.className = "row";
+    row.innerHTML = '<span class="name"></span><div class="seg" role="group"><button type="button" class="yes">✅</button><button type="button" class="no">❌</button></div>';
+    row.querySelector(".name").textContent = label;
+    row.querySelector(".seg").setAttribute("aria-label", label);
+    const yes = row.querySelector(".yes"), no = row.querySelector(".no");
+    yes.setAttribute("aria-label", label + " کرا"); no.setAttribute("aria-label", label + " نەکرا");
+    const reason = document.createElement("input"); reason.type = "text"; reason.id = "reason-" + key; reason.className = "reason";
+    reason.placeholder = "هۆکار (بۆ نموونە: باران، کلیل نەبوو)"; reason.hidden = true;
+    reason.addEventListener("input", () => { state.reasons[key] = reason.value.trim(); render(); });
+    const sync = () => { yes.setAttribute("aria-pressed", String(state.checks[key])); no.setAttribute("aria-pressed", String(!state.checks[key])); reason.hidden = state.checks[key]; };
+    yes.addEventListener("click", () => { state.checks[key] = true; sync(); render(); });
+    no.addEventListener("click", () => { state.checks[key] = false; sync(); render(); reason.focus(); });
+    row.appendChild(reason); box.appendChild(row); row._sync = sync; sync();
+  });
+}
+function buildDays() {
+  const box = $("days");
+  DAYS.forEach(([k, label]) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "day"; b.dataset.k = String(k);
+    b.append(label);
+    if (k !== "?") { const s = document.createElement("small"); s.textContent = fmt(daysAgo(k)); b.appendChild(s); }
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", () => { state.delivery = (k === "?") ? "نەزانراو" : fmt(daysAgo(k)); $("otherDate").value = ""; markDays(String(k)); render(); });
+    box.appendChild(b);
+  });
+  $("otherDate").addEventListener("change", e => {
+    const v = e.target.value; if (!v) return;
+    const [y, m, d] = v.split("-"); state.delivery = y + "/" + m + "/" + d; markDays(null); render();
+  });
+}
+function markDays(k) { document.querySelectorAll(".day").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.k === k))); }
+
+function text() {
+  const c = key => state.checks[key] ? "✅" : ("❌" + (state.reasons[key] ? " " + state.reasons[key] : ""));
+  return [
+    "بەروار : " + fmt(new Date()),
+    "بەنزین خانە : " + (state.station || "—"),
+    "تۆتاڵ : " + c("total"),
+    "زەرعی تانکی : " + c("dip"),
+    "نموونە : " + c("sample"),
+    "کاتی بەنزین هاتن : " + (state.delivery || "—"),
+    "تێبینی : " + (state.note.trim() || "0️⃣"),
+  ].join("\n");
+}
+function render() {
+  $("todayTxt").textContent = fmt(new Date());
+  const t = text(); $("out").textContent = t;
+  const miss = [];
+  if (!state.station) miss.push("بەنزینخانە");
+  if (!state.delivery) miss.push("کاتی بەنزین هاتن");
+  $("missing").textContent = miss.length ? "هێشتا هەڵنەبژێردراوە: " + miss.join(" و ") : "";
+  const ready = miss.length === 0;
+  $("copyBtn").setAttribute("aria-disabled", String(!ready));
+  const wa = $("waBtn");
+  wa.setAttribute("aria-disabled", String(!ready));
+  wa.href = "https://wa.me/?text=" + encodeURIComponent(t);
+}
+function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => el.hidden = true, 1800); }
+function selectOut() { const r = document.createRange(); r.selectNodeContents($("out")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+
+$("copyBtn").addEventListener("click", () => {
+  if ($("copyBtn").getAttribute("aria-disabled") === "true") return;
+  const t = text();
+  const ok = () => toast("کۆپی کرا ✓ ئێستا لە WhatsApp Paste بکە");
+  const fail = () => { selectOut(); toast("دەقەکە هەڵبژێردرا، کۆپی بکە"); };
+  try { navigator.clipboard.writeText(t).then(ok, fail); } catch (e) { fail(); }
+});
+$("note").addEventListener("input", e => { state.note = e.target.value; render(); });
+$("resetBtn").addEventListener("click", () => {
+  state.station = null; state.delivery = null; state.note = "";
+  CHECKS.forEach(([k]) => { state.checks[k] = true; state.reasons[k] = ""; const r = $("reason-" + k); if (r) r.value = ""; });
+  document.querySelectorAll(".row").forEach(r => r._sync && r._sync());
+  $("note").value = ""; $("otherDate").value = ""; markDays(null); buildStations(); render();
+  window.scrollTo({ top: 0, behavior: "smooth" }); toast("ئامادەیە بۆ بەنزینخانەی داهاتوو");
+});
+
+buildLines(); buildStations(); buildChecks(); buildDays(); render();
+</script>
+
+</body>
+</html>
